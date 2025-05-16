@@ -1,0 +1,8 @@
+streamlit
+pandas
+numpy
+pickle5
+rapidfuzz
+streamlit-option-menu
+Pillow
+gdown
