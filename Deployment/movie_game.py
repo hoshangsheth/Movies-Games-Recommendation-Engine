@@ -1,34 +1,45 @@
-import gdown
 import os
 import shutil
-import streamlit as st
+
+import gdown
 import pickle
 import numpy as np
+import pandas as pd
+from PIL import Image
 
-def download_and_place(file_id, download_name, final_path):
-    # Create final directory if it doesn't exist
-    os.makedirs(os.path.dirname(final_path), exist_ok=True)
-    
-    if not os.path.exists(final_path):
-        print(f"Downloading {download_name}...")
-        gdown.download(f"https://drive.google.com/uc?id={file_id}", download_name, quiet=False)
-        shutil.move(download_name, final_path)
-        print(f"Moved to {final_path}")
+import streamlit as st
+import streamlit.components.v1 as components
+from streamlit_option_menu import option_menu
+
+from rapidfuzz import process, fuzz
+
+def download_file_from_google_drive(file_id, output_path):
+    if not os.path.exists(output_path):
+        url = f"https://drive.google.com/uc?id={file_id}"
+        print(f"Downloading {output_path}...")
+        gdown.download(url, output_path, quiet=False)
     else:
-        print(f"{final_path} already exists. Skipping download.")
-# ---------------------------- Download Files ----------------------------
-download_and_place("1ETcGXM17tHy3NCK1YnH9KkRUJwp", "cosine_sim_games.npy", "Games/Recommendation Engine/cosine_sim_games.npy")
-download_and_place("15Yslf-dem8CsVIOecxzLmmarP2Rj4RO4", "cosine_sim_movies.pkl", "Movies/Recommendation Engine/cosine_sim_movies.pkl")
-download_and_place("1wipg2mKPFDNXTkyggfSCcpkZS9MNHoBC", "games_recommended.pkl", "Games/Recommendation Engine/games_recommended.pkl")
+        print(f"{output_path} already exists. Skipping download.")
+
+# Google Drive file IDs for large files
+files = {
+    "cosine_sim_games.npy": "1ETcGXM17tHy3NCK1YnH9KkRUJwp-_ryt",
+    "cosine_sim_movies.pkl": "15Yslf-dem8CsVIOecxzLmmarP2Rj4RO4",
+    "games_recommended.pkl": "1wipg2mKPFDNXTkyggfSCcpkZS9MNHoBC"
+}
+
+# Download all files if missing
+for filename, file_id in files.items():
+    download_file_from_google_drive(file_id, filename)
 
 # ---------------------------- Set Streamlit page configuration ----------------------------
 st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
 
-# ---------------------------- Load Data -----------------------------------
-movies = pickle.load(open("Movies/Recommendation Engine/movies_recommended.pkl", 'rb'))
-movies_matrix = pickle.load(open("Movies/Recommendation Engine/cosine_sim_movies.pkl", 'rb'))
-games = pickle.load(open("Games/Recommendation Engine/games_recommended.pkl", 'rb'))
-games_matrix = np.load("Games/Recommendation Engine/cosine_sim_games.npy")
+# Load data files
+movies = pickle.load(open("movies_recommended.pkl", "rb"))              # Already in repo
+movies_matrix = pickle.load(open("cosine_sim_movies.pkl", "rb"))        # Downloaded from Drive
+games = pickle.load(open("games_recommended.pkl", "rb"))                # Downloaded from Drive
+games_matrix = np.load("cosine_sim_games.npy")                          # Downloaded from Drive
 # Aliases:
 movie_aliases = {
     "znmd": "Zindagi Na Milegi Dobara",
