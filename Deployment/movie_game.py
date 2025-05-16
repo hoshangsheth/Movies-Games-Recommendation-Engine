@@ -1,22 +1,34 @@
+import gdown
+import os
+import shutil
 import streamlit as st
-import streamlit.components.v1 as components
-import pandas as pd
-import numpy as np
 import pickle
-import re
-from rapidfuzz import process, fuzz
-from datetime import datetime
-from streamlit_option_menu import option_menu
-from PIL import Image
+import numpy as np
+
+def download_and_place(file_id, download_name, final_path):
+    # Create final directory if it doesn't exist
+    os.makedirs(os.path.dirname(final_path), exist_ok=True)
+    
+    if not os.path.exists(final_path):
+        print(f"Downloading {download_name}...")
+        gdown.download(f"https://drive.google.com/uc?id={file_id}", download_name, quiet=False)
+        shutil.move(download_name, final_path)
+        print(f"Moved to {final_path}")
+    else:
+        print(f"{final_path} already exists. Skipping download.")
+# ---------------------------- Download Files ----------------------------
+download_and_place("1ETcGXM17tHy3NCK1YnH9KkRUJwp", "cosine_sim_games.npy", "Games/Recommendation Engine/cosine_sim_games.npy")
+download_and_place("15Yslf-dem8CsVIOecxzLmmarP2Rj4RO4", "cosine_sim_movies.pkl", "Movies/Recommendation Engine/cosine_sim_movies.pkl")
+download_and_place("1wipg2mKPFDNXTkyggfSCcpkZS9MNHoBC", "games_recommended.pkl", "Games/Recommendation Engine/games_recommended.pkl")
 
 # ---------------------------- Set Streamlit page configuration ----------------------------
 st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
 
 # ---------------------------- Load Data -----------------------------------
-movies = pickle.load(open("../Movies/Recommendation Engine/movies_recommended.pkl", 'rb'))
-movies_matrix = pickle.load(open("../Movies/Recommendation Engine/cosine_sim.pkl", 'rb'))
-games = pickle.load(open("../Games/Recommendation Engine/games_recommended.pkl", 'rb'))
-games_matrix = np.load("../Games/Recommendation Engine/cosine_sim.npy")
+movies = pickle.load(open("Movies/Recommendation Engine/movies_recommended.pkl", 'rb'))
+movies_matrix = pickle.load(open("Movies/Recommendation Engine/cosine_sim_movies.pkl", 'rb'))
+games = pickle.load(open("Games/Recommendation Engine/games_recommended.pkl", 'rb'))
+games_matrix = np.load("Games/Recommendation Engine/cosine_sim_games.npy")
 # Aliases:
 movie_aliases = {
     "znmd": "Zindagi Na Milegi Dobara",
