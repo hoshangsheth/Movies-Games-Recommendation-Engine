@@ -3,6 +3,5 @@ pandas
 numpy
 pickle
 rapidfuzz
-streamlit-option-menu
 Pillow
 gdown
