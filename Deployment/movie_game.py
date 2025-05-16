@@ -1,5 +1,6 @@
 import os
 import shutil
+import gzip
 
 import gdown
 import pickle
@@ -20,28 +21,40 @@ def download_if_missing(url, filepath):
     print(f"Downloading {filepath}...")
     gdown.download(url, filepath, quiet=False)
 
-# Usage
-download_if_missing('https://drive.google.com/uc?id=1wipg2mKPFDNXTkyggfSCcpkZS9MNHoBC', 'games_recommended.pkl')
-
-# Google Drive file IDs for large files
+# Google Drive links for the .gz files
 files = {
-    "cosine_sim_games.npy": "1ETcGXM17tHy3NCK1YnH9KkRUJwp-_ryt",
-    "cosine_sim_movies.pkl": "15Yslf-dem8CsVIOecxzLmmarP2Rj4RO4",
-    "games_recommended.pkl": "1wipg2mKPFDNXTkyggfSCcpkZS9MNHoBC"
+    "cosine_sim_games.npy.gz": "https://drive.google.com/uc?id=1IyRao4WIYfJawhxohNxZVkTlLJFQGukT",
+    "cosine_sim_movies.pkl.gz": "https://drive.google.com/uc?id=1RCzwR-5s4PvIUiLmUNc90dOZU-XX6L10",
+    "games_recommended.pkl.gz": "https://drive.google.com/uc?id=1e9Vf4HauyY8AKFEvMdudZlwqAG6e2H0x"
 }
 
-for filename, file_id in files.items():
-    url = f'https://drive.google.com/uc?id={file_id}'
+# Step 1: Download all .gz files if missing
+for filename, url in files.items():
     download_if_missing(url, filename)
+
+# Custom functions to decompress and load
+def decompress_and_load_pickle(filepath):
+    with gzip.open(filepath, 'rb') as f:
+        return pickle.load(f)
+
+def decompress_and_load_npy(filepath):
+    with gzip.open(filepath, 'rb') as f:
+        return np.load(f, allow_pickle=True)
+
+# Load all data from .gz files
+movies = pickle.load(open("movies_recommended.pkl", "rb"))  # still okay if uncompressed file is in repo
+movies_matrix = decompress_and_load_pickle("cosine_sim_movies.pkl.gz")
+games = decompress_and_load_pickle("games_recommended.pkl.gz")
+games_matrix = decompress_and_load_npy("cosine_sim_games.npy.gz")
 
 # ---------------------------- Set Streamlit page configuration ----------------------------
 st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
 
-# Load data files
-movies = pickle.load(open("movies_recommended.pkl", "rb"))              # Already in repo
-movies_matrix = pickle.load(open("cosine_sim_movies.pkl", "rb"))        # Downloaded from Drive
-games = pickle.load(open("games_recommended.pkl", "rb"))                # Downloaded from Drive
-games_matrix = np.load("cosine_sim_games.npy")                          # Downloaded from Drive
+# # Load data files
+# movies = pickle.load(open("movies_recommended.pkl", "rb"))              # Already in repo
+# movies_matrix = pickle.load(open("cosine_sim_movies.pkl", "rb"))        # Downloaded from Drive
+# games = pickle.load(open("games_recommended.pkl", "rb"))                # Downloaded from Drive
+# games_matrix = np.load("cosine_sim_games.npy")                          # Downloaded from Drive
 # Aliases:
 movie_aliases = {
     "znmd": "Zindagi Na Milegi Dobara",
