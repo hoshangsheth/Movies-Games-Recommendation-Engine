@@ -30,9 +30,9 @@ files = {
     "games_recommended.pkl": "1wipg2mKPFDNXTkyggfSCcpkZS9MNHoBC"
 }
 
-# Download all files if missing
 for filename, file_id in files.items():
-    download_file_from_google_drive(file_id, filename)
+    url = f'https://drive.google.com/uc?id={file_id}'
+    download_if_missing(url, filename)
 
 # ---------------------------- Set Streamlit page configuration ----------------------------
 st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
