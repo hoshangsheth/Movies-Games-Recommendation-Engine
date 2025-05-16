@@ -1,7 +1,7 @@
 streamlit
 pandas
 numpy
-pickle
 rapidfuzz
 Pillow
 gdown
+streamlit-option-menu
