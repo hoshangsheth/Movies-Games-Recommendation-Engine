@@ -13,13 +13,15 @@ from streamlit_option_menu import option_menu
 
 from rapidfuzz import process, fuzz
 
-def download_file_from_google_drive(file_id, output_path):
-    if not os.path.exists(output_path):
-        url = f"https://drive.google.com/uc?id={file_id}"
-        print(f"Downloading {output_path}...")
-        gdown.download(url, output_path, quiet=False)
-    else:
-        print(f"{output_path} already exists. Skipping download.")
+def download_if_missing(url, filepath):
+    if os.path.exists(filepath):
+        print(f"{filepath} already exists. Skipping download.")
+        return
+    print(f"Downloading {filepath}...")
+    gdown.download(url, filepath, quiet=False)
+
+# Usage
+download_if_missing('https://drive.google.com/uc?id=1wipg2mKPFDNXTkyggfSCcpkZS9MNHoBC', 'games_recommended.pkl')
 
 # Google Drive file IDs for large files
 files = {
