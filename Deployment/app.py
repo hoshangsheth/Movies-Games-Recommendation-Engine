@@ -14,15 +14,39 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
+# Load the files:
+
+# This gets the absolute path of the current script
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+@st.cache_resource
+def load_movies():
+    file_path = os.path.join(BASE_DIR, "movies_recommended.pkl")
+    return pickle.load(open(file_path, 'rb'))
+
+@st.cache_resource
+def load_movies_matrix():
+    file_path = os.path.join(BASE_DIR, "cosine_sim.pkl")
+    return pickle.load(open(file_path, 'rb'))
+
+@st.cache_resource
+def load_games():
+    file_path = os.path.join(BASE_DIR, "games_recommended.pkl")
+    return pickle.load(open(file_path, 'rb'))
+
+@st.cache_resource
+def load_games_matrix():
+    file_path = os.path.join(BASE_DIR, "cosine_sim.npy")
+    return np.load(file_path)
+
+# Load all
+movies = load_movies()
+movies_matrix = load_movies_matrix()
+games = load_games()
+games_matrix = load_games_matrix()
+
 # ---------------------------- Set Streamlit page configuration ----------------------------
 st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
-
-# Load directly from root directory
-# Go up one level from /Deployment to reach root where files are
-movies = pickle.load(open("../movies_recommended.pkl", 'rb'))
-movies_matrix = pickle.load(open("../cosine_sim.pkl", 'rb'))
-games = pickle.load(open("../games_recommended.pkl", 'rb'))
-games_matrix = np.load("../cosine_sim.npy")
 
 # Aliases:
 movie_aliases = {
