@@ -2,6 +2,8 @@ streamlit
 pandas
 numpy
 rapidfuzz
+streamlit-option-menu
 Pillow
 gdown
-streamlit-option-menu
+gspread
+oauth2client
