@@ -14,49 +14,15 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
-def download_file_if_not_exists(file_id, output_path):
-    if not os.path.exists(output_path):
-        print(f"Downloading {output_path} from Google Drive...")
-        url = f"https://drive.google.com/uc?id={file_id}"
-        gdown.download(url, output_path, quiet=False, use_cookies=False)
-    else:
-        print(f"{output_path} already exists locally.")
-
-# Directory guaranteed writable in Spaces
-download_dir = "/tmp/"
-
-# Google Drive file IDs for your big files
-files_to_download = {
-    "cosine_sim_games.npy": "1ETcGXM17tHy3NCK1YnH9KkRUJwp-_ryt",
-    "cosine_sim_movies.pkl": "15Yslf-dem8CsVIOecxzLmmarP2Rj4RO4",
-    "movies_recommended.pkl": "1mYpRMARtFT8FkV81klF_7yhYyKhDpwMv",
-    "games_recommended.pkl": "1wipg2mKPFDNXTkyggfSCcpkZS9MNHoBC",
-}
-
-# Download files if not present
-for filename, file_id in files_to_download.items():
-    download_file_if_not_exists(file_id, os.path.join(download_dir, filename))
-
-# Load the data from /tmp/
-with open(os.path.join(download_dir, "movies_recommended.pkl"), "rb") as f:
-    movies = pickle.load(f)
-
-with open(os.path.join(download_dir, "cosine_sim_movies.pkl"), "rb") as f:
-    movies_matrix = pickle.load(f)
-
-with open(os.path.join(download_dir, "games_recommended.pkl"), "rb") as f:
-    games = pickle.load(f)
-
-games_matrix = np.load(os.path.join(download_dir, "cosine_sim_games.npy"))
-
 # ---------------------------- Set Streamlit page configuration ----------------------------
 st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
 
-# # Load data files
-# movies = pickle.load(open("movies_recommended.pkl", "rb"))              # Already in repo
-# movies_matrix = pickle.load(open("cosine_sim_movies.pkl", "rb"))        # Downloaded from Drive
-# games = pickle.load(open("games_recommended.pkl", "rb"))                # Downloaded from Drive
-# games_matrix = np.load("cosine_sim_games.npy")                          # Downloaded from Drive
+# Load directly from root directory
+movies = pickle.load(open("movies_recommended.pkl", 'rb'))
+movies_matrix = pickle.load(open("cosine_sim.pkl", 'rb'))
+games = pickle.load(open("games_recommended.pkl", 'rb'))
+games_matrix = np.load("cosine_sim.npy")
+
 # Aliases:
 movie_aliases = {
     "znmd": "Zindagi Na Milegi Dobara",
