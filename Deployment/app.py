@@ -1,51 +1,53 @@
-import os
-import shutil
-import gzip
-
-import gdown
-import pickle
-import numpy as np
-import pandas as pd
-from PIL import Image
-
 import streamlit as st
 import streamlit.components.v1 as components
-from streamlit_option_menu import option_menu
-
+import pandas as pd
+import numpy as np
+import pickle
+import re
 from rapidfuzz import process, fuzz
+from datetime import datetime
+from streamlit_option_menu import option_menu
+from PIL import Image
+import os
+import gdown
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 
-def download_if_missing(url, filepath):
-    if os.path.exists(filepath):
-        print(f"{filepath} already exists. Skipping download.")
-        return
-    print(f"Downloading {filepath}...")
-    gdown.download(url, filepath, quiet=False)
+def download_file_if_not_exists(file_id, output_path):
+    if not os.path.exists(output_path):
+        print(f"Downloading {output_path} from Google Drive...")
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, output_path, quiet=False, use_cookies=False)
+    else:
+        print(f"{output_path} already exists locally.")
 
-# Google Drive links for the .gz files
-files = {
-    "cosine_sim_games.npy.gz": "https://drive.google.com/uc?id=1IyRao4WIYfJawhxohNxZVkTlLJFQGukT",
-    "cosine_sim_movies.pkl.gz": "https://drive.google.com/uc?id=1RCzwR-5s4PvIUiLmUNc90dOZU-XX6L10",
-    "games_recommended.pkl.gz": "https://drive.google.com/uc?id=1e9Vf4HauyY8AKFEvMdudZlwqAG6e2H0x"
+# Directory guaranteed writable in Spaces
+download_dir = "/tmp/"
+
+# Google Drive file IDs for your big files
+files_to_download = {
+    "cosine_sim_games.npy": "1ETcGXM17tHy3NCK1YnH9KkRUJwp-_ryt",
+    "cosine_sim_movies.pkl": "15Yslf-dem8CsVIOecxzLmmarP2Rj4RO4",
+    "movies_recommended.pkl": "1mYpRMARtFT8FkV81klF_7yhYyKhDpwMv",
+    "games_recommended.pkl": "1wipg2mKPFDNXTkyggfSCcpkZS9MNHoBC",
 }
 
-# Step 1: Download all .gz files if missing
-for filename, url in files.items():
-    download_if_missing(url, filename)
+# Download files if not present
+for filename, file_id in files_to_download.items():
+    download_file_if_not_exists(file_id, os.path.join(download_dir, filename))
 
-# Custom functions to decompress and load
-def decompress_and_load_pickle(filepath):
-    with gzip.open(filepath, 'rb') as f:
-        return pickle.load(f)
+# Load the data from /tmp/
+with open(os.path.join(download_dir, "movies_recommended.pkl"), "rb") as f:
+    movies = pickle.load(f)
 
-def decompress_and_load_npy(filepath):
-    with gzip.open(filepath, 'rb') as f:
-        return np.load(f, allow_pickle=True)
+with open(os.path.join(download_dir, "cosine_sim_movies.pkl"), "rb") as f:
+    movies_matrix = pickle.load(f)
 
-# Load all data from .gz files
-movies = pickle.load(open("movies_recommended.pkl", "rb"))  # still okay if uncompressed file is in repo
-movies_matrix = decompress_and_load_pickle("cosine_sim_movies.pkl.gz")
-games = decompress_and_load_pickle("games_recommended.pkl.gz")
-games_matrix = decompress_and_load_npy("cosine_sim_games.npy.gz")
+with open(os.path.join(download_dir, "games_recommended.pkl"), "rb") as f:
+    games = pickle.load(f)
+
+games_matrix = np.load(os.path.join(download_dir, "cosine_sim_games.npy"))
 
 # ---------------------------- Set Streamlit page configuration ----------------------------
 st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
