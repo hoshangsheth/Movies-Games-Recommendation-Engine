@@ -18,10 +18,11 @@ from datetime import datetime
 st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
 
 # Load directly from root directory
-movies = pickle.load(open("movies_recommended.pkl", 'rb'))
-movies_matrix = pickle.load(open("cosine_sim.pkl", 'rb'))
-games = pickle.load(open("games_recommended.pkl", 'rb'))
-games_matrix = np.load("cosine_sim.npy")
+# Go up one level from /Deployment to reach root where files are
+movies = pickle.load(open("../movies_recommended.pkl", 'rb'))
+movies_matrix = pickle.load(open("../cosine_sim.pkl", 'rb'))
+games = pickle.load(open("../games_recommended.pkl", 'rb'))
+games_matrix = np.load("../cosine_sim.npy")
 
 # Aliases:
 movie_aliases = {
