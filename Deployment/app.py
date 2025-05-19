@@ -1080,8 +1080,8 @@ elif selected == "Contact Me":
         "https://www.googleapis.com/auth/drive"
         ]
 
-        # creds_dict = st.secrets['gcp_service_account']
-        creds = ServiceAccountCredentials.from_json_keyfile_name("D:/ML Projects/Movie-Game Recommendation System/mg-recommendation-engine-88c4ea771859.json", scope)
+        creds_dict = st.secrets['gcp_service_account']
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
         client = gspread.authorize(creds)
 
         sheet = client.open_by_key("1dlXnan4bMdcbdoXngU_15u4A0OVI_m4uUnRew3traXY").worksheet("Sheet1")
