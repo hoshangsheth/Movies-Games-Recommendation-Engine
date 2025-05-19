@@ -11,23 +11,39 @@ No installations, no fuss — just click and dive into your next favorite movie 
 
 ---
 
-## 🚀 Features
-- **Dual Recommendation:** Switch effortlessly between movies and games recommendations
-- **Fuzzy Search:** Handles typos and approximate inputs gracefully using fuzzy string matching
-- **Rich Data:** Fetches posters, ratings, and relevant streaming or purchase links via TMDB and RAWG APIs
-- **Advanced Similarity:** Recommendations computed using cosine similarity on TF-IDF vectorized features — over **30,000+ unique tokens** analyzed for maximum relevance
-- **Efficient & Scalable:** Optimized data processing with NumPy and Pandas ensures fast responses even on large datasets
+## 📌 Features
+
+🔍 **Smart Search with Aliases & Fuzzy Matching**  
+🧠 **Cosine Similarity-Based Recommendations**  
+🎞️ **Movies**: Posters, trailers, cast pictures, descriptions, genres, watch links, and ratings  
+🕹️ **Games**: Store links, developer/publisher, tags, ESRB ratings, website, and screenshots  
+🎨 **Futuristic UI**: Custom CSS with animated transitions, modern sidebar, and responsive layout  
+🧭 **Intuitive Navigation**: Sidebar menu with pages for Home, Recommend Movies, Recommend Games, and Contact Me  
+📩 **Google Sheets Integration** for the contact form
 
 ---
 
-## 🔧 Tech Stack & Techniques
-- **Python** — Core programming language powering the logic
-- **Streamlit** — Interactive web app framework for easy deployment
-- **TMDB API & RAWG API** — Source of rich metadata for movies and games
-- **FuzzyWuzzy** — Implements fuzzy string matching for smart search capability
-- **TF-IDF Vectorization** — Converts textual metadata into high-dimensional numeric vectors representing importance of terms
-- **Cosine Similarity** — Calculates similarity between TF-IDF vectors to find closest matches
-- **NumPy & Pandas** — High-performance data manipulation and computation libraries
+## 🧠 Recommendation Logic
+
+- **Data Cleaning & Preprocessing**: Titles cleaned using regex
+- **Fuzzy Search**: Implemented via `rapidfuzz` to handle partial and alias-based searches
+- **Similarity Computation**: Precomputed Cosine Similarity Matrix (Pickle + Numpy)
+- **Smart Aliasing**: Robust dictionaries for common abbreviations (e.g., "ZNMD" → *Zindagi Na Milegi Dobara*)
+- **Metadata Enhancement**: Enriched recommendations with trailers, store links, cast, ratings, screenshots, etc.
+
+---
+
+## 🛠️ Tech Stack
+
+| Tool        | Use                                                                 |
+|-------------|----------------------------------------------------------------------|
+| Python      | Core logic                                                           |
+| Streamlit   | Frontend & app deployment                                            |
+| Pandas/Numpy| Data wrangling and similarity matrices                               |
+| RapidFuzz   | Fuzzy string matching                                                |
+| Pickle/NPY  | Serialized cosine similarity matrices                                |
+| Google Sheets | Contact form backend via `gspread`                                 |
+| CSS         | Custom styling & animations                                          |
 
 ---
 
@@ -35,3 +51,16 @@ No installations, no fuss — just click and dive into your next favorite movie 
 Blending NLP techniques like TF-IDF with classic ML similarity measures and real-time API data fetching, this project showcases how to build scalable, intelligent recommendation engines. Whether you’re a movie buff or a gamer, this engine serves up personalized content that truly fits your taste—powered by over 30,000 features crunching behind the scenes.
 
 ---
+
+## 🚀 How to Run Locally
+
+```bash
+# Clone the repo
+git clone https://github.com/hoshangsheth/Movies-Games-Recommendation-Engine.git
+cd Movies-Games-Recommendation-Engine
+
+# Create virtual environment & install dependencies
+pip install -r requirements.txt
+
+# Launch the app
+streamlit run movie_game.py
