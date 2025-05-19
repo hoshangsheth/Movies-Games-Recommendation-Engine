@@ -96,6 +96,9 @@ movie_aliases = {
     "ktkg": "Kuch Tum Kaho Kuch Hum Kahein",
     "kkn": "Kabir Khan",
     "tmk": "Tees Maar Khan",
+    "angry birds": "The Angry Birds Movie",
+    "angry birds 2": "The Angry Birds Movie 2",
+    "nemo": "Finding Nemo"
 }
 
 alias_dict = {
@@ -265,7 +268,10 @@ alias_dict = {
     "survivor": "star wars jedi survivor",
 
     # Borderlands
-    "bl3": "borderlands 3"
+    "bl3": "borderlands 3",
+
+    # Avengers
+    "avengers": "Marvel's Avengers"
 }
 
 # ------------------------ Recommendation Functions -----------------------
