@@ -71,7 +71,7 @@ movie_aliases = {
     "interstellar": "Interstellar",
     "jp": "Jurassic Park",
     "potc": "Pirates of the Caribbean",
-    "singham: "Singham Again,
+    "singham: "Singham Again",
     "ddlj: "Dilwale Dulhania Le Jayenge",
     "rrr": "RRR",
     "kgf": "KGF Chapter 1",
