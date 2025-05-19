@@ -14,6 +14,9 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
+# ---------------------------- Set Streamlit page configuration ----------------------------
+st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
+
 # Load the files:
 
 # This gets the absolute path of the current script
@@ -44,9 +47,6 @@ movies = load_movies()
 movies_matrix = load_movies_matrix()
 games = load_games()
 games_matrix = load_games_matrix()
-
-# ---------------------------- Set Streamlit page configuration ----------------------------
-st.set_page_config(page_title="Movie - Game Recommendation Engine", layout="wide")
 
 # Aliases:
 movie_aliases = {
