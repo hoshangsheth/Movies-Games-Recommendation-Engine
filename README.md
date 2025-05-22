@@ -63,4 +63,4 @@ cd Movies-Games-Recommendation-Engine
 pip install -r requirements.txt
 
 # Launch the app
-streamlit run movie_game.py
+streamlit run app.py
