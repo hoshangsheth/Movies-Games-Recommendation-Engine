@@ -1,0 +1,61 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 0 56px;
+  max-width: 1280px;
+  position: relative;
+}
+
+@media (max-width: 860px) {
+  .app-content {
+    margin-left: 0;
+    padding: 0 24px;
+  }
+}
+
+.page-bg-home {
+  background: radial-gradient(ellipse at 20% 50%, rgba(76, 29, 149, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(99, 20, 120, 0.1) 0%, transparent 50%);
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.page-bg-movies {
+  background: radial-gradient(ellipse at 10% 30%, rgba(120, 40, 40, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 70%, rgba(76, 29, 149, 0.1) 0%, transparent 50%);
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.page-bg-games {
+  background: radial-gradient(ellipse at 15% 40%, rgba(20, 60, 100, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 20%, rgba(76, 29, 149, 0.1) 0%, transparent 50%);
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.page-bg-contact {
+  background: radial-gradient(ellipse at 50% 0%, rgba(76, 29, 149, 0.1) 0%, transparent 60%);
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.error-banner {
+  background: rgba(220, 60, 60, 0.1);
+  border: 1px solid rgba(220, 60, 60, 0.3);
+  color: #ffb3b3;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,79 @@
+.recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .recommendation-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .recommendation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recommendation-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.recommendation-card-poster-wrap {
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.recommendation-card-poster {
+  display: block;
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.recommendation-card-poster.poster-game {
+  height: 220px;
+}
+
+.recommendation-card-title {
+  background: var(--surface-2);
+  border: 1px solid var(--surface-border);
+  color: #d4c8f0;
+  padding: 8px 10px;
+  border-radius: 7px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 400;
+  margin-bottom: 6px;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.recommendation-card-button {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--accent-purple-08);
+  color: var(--text-accent);
+  border: 1px solid var(--accent-purple-28);
+  border-radius: 6px;
+  padding: 9px 18px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.25s ease;
+}
+
+.recommendation-card-button:hover {
+  background: rgba(200, 130, 255, 0.18);
+  border-color: rgba(200, 130, 255, 0.55);
+  color: #f0e0ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(180, 100, 255, 0.2);
+}

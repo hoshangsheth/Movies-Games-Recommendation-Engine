@@ -1,0 +1,109 @@
+/* ============================================================
+   CineVerse design tokens
+   Extracted verbatim from the original Streamlit app's inline CSS
+   (Deployment/app.py). Colors, fonts, and spacing values are kept
+   identical — this is a faithful port, not a redesign.
+   ============================================================ */
+
+:root {
+  /* Base */
+  --bg-base: #080810;
+  --bg-sidebar-top: #0e0b1f;
+  --bg-sidebar-mid: #0b0b1a;
+  --bg-sidebar-bottom: #080812;
+
+  /* Text */
+  --text-primary: #e8e4dc;
+  --text-heading: #ede8ff;
+  --text-heading-soft: #e8deff;
+  --text-accent: #d4b8ff;
+  --text-muted: rgba(200, 185, 230, 0.55);
+  --text-faint: rgba(180, 165, 210, 0.45);
+
+  /* Purple / indigo accent system */
+  --accent-purple: #c084fc;
+  --accent-purple-soft: rgba(192, 132, 252, 0.7);
+  --accent-purple-08: rgba(192, 132, 252, 0.08);
+  --accent-purple-10: rgba(192, 132, 252, 0.1);
+  --accent-purple-12: rgba(192, 132, 252, 0.12);
+  --accent-purple-15: rgba(192, 132, 252, 0.15);
+  --accent-purple-20: rgba(192, 132, 252, 0.2);
+  --accent-purple-28: rgba(192, 132, 252, 0.28);
+  --accent-indigo: #818cf8;
+
+  /* Surfaces */
+  --surface-1: rgba(255, 255, 255, 0.025);
+  --surface-2: rgba(255, 255, 255, 0.04);
+  --surface-border: rgba(255, 255, 255, 0.07);
+  --surface-border-soft: rgba(255, 255, 255, 0.05);
+
+  /* Fonts */
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: "Outfit", sans-serif;
+
+  /* Radii */
+  --radius-md: 7px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text-primary);
+}
+
+a {
+  color: inherit;
+}
+
+hr {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-purple-20);
+  border-radius: 2px;
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+/* Focus visibility, kept subtle but present (accessibility floor) */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent-purple-soft);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

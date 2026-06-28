@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: recommendation-engine-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - model-artifacts:/tmp/recommender-artifacts
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: recommendation-engine-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  model-artifacts:
