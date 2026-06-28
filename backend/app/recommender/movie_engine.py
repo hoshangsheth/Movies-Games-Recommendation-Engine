@@ -1,15 +1,23 @@
 """
 Movie recommendation engine.
 
-This is `recommend_movies()` from the original `Deployment/app.py`,
-preserved field-for-field and behavior-for-behavior, but restructured as a
-class that receives its dataframe and similarity matrix as dependencies
-instead of closing over module-level globals. This makes it importable
-and unit-testable independent of any web framework.
+What changed from the original
+--------------------------------
+Old: stored `self.similarity_matrix` (dense N×N precomputed cosine matrix)
+     and passed `self.similarity_matrix[idx]` (one dense row) to
+     `top_n_similar_indices`.
+
+New: stores `self.tfidf_matrix` (sparse TF-IDF, loaded once at startup)
+     and passes the full matrix + idx to `top_n_similar_indices`, which
+     computes cosine similarity on demand for that single row.
+
+Everything else — fuzzy matching, alias resolution, result field mapping,
+exception handling, and API response shape — is completely unchanged.
 """
 from __future__ import annotations
 
 import pandas as pd
+import scipy.sparse
 
 from app.core.constants import MOVIE_ALIASES, REQUIRED_MOVIE_FIELDS
 from app.core.logger import get_logger
@@ -21,24 +29,21 @@ logger = get_logger(__name__)
 
 class MovieRecommendationEngine:
     """
-    Wraps the precomputed movie dataframe + cosine similarity matrix and
-    exposes the same recommendation behavior as the original
-    `recommend_movies()` function.
+    Wraps the movie dataframe and sparse TF-IDF matrix; computes cosine
+    similarity on demand per request.
     """
 
-    def __init__(self, movies: pd.DataFrame, similarity_matrix) -> None:
+    def __init__(self, movies: pd.DataFrame, tfidf_matrix: scipy.sparse.csr_matrix) -> None:
         self.movies = movies
-        self.similarity_matrix = similarity_matrix
+        self.tfidf_matrix = tfidf_matrix
 
     def recommend(self, user_input: str, top_n: int = 10) -> list[dict]:
         """
         Return up to `top_n` movies similar to `user_input`.
 
         Raises:
-            ValueError: empty input, or no fuzzy match found, or the
-                matched row's index is out of range — same exception
-                semantics as the original function, so callers (the
-                service layer) can map them to API errors consistently.
+            ValueError: empty input, no fuzzy match found, or index out of
+                range — same exception semantics as the original.
         """
         try:
             cleaned_input, best_match = resolve_best_title_match(
@@ -51,7 +56,8 @@ class MovieRecommendationEngine:
             if idx < 0 or idx >= len(self.movies):
                 raise IndexError(f"Index {idx} is out of range.")
 
-            similar = top_n_similar_indices(self.similarity_matrix[idx], top_n)
+            # On-demand cosine similarity — replaces precomputed matrix row lookup
+            similar = top_n_similar_indices(self.tfidf_matrix, idx, top_n)
 
             results: list[dict] = []
             for i, _score in similar:

@@ -1,14 +1,23 @@
 """
 Game recommendation engine.
 
-This is `recommend_games()` from the original `Deployment/app.py`,
-preserved field-for-field and behavior-for-behavior, but restructured as a
-class that receives its dataframe and similarity matrix as dependencies
-instead of closing over module-level globals.
+What changed from the original
+--------------------------------
+Old: stored `self.similarity_matrix` (dense N×N precomputed cosine matrix)
+     and passed `self.similarity_matrix[idx]` (one dense row) to
+     `top_n_similar_indices`.
+
+New: stores `self.tfidf_matrix` (sparse TF-IDF, loaded once at startup)
+     and passes the full matrix + idx to `top_n_similar_indices`, which
+     computes cosine similarity on demand for that single row.
+
+Everything else — fuzzy matching, alias resolution, result field mapping,
+exception handling, and API response shape — is completely unchanged.
 """
 from __future__ import annotations
 
 import pandas as pd
+import scipy.sparse
 
 from app.core.constants import GAME_ALIASES, REQUIRED_GAME_FIELDS
 from app.core.logger import get_logger
@@ -20,22 +29,21 @@ logger = get_logger(__name__)
 
 class GameRecommendationEngine:
     """
-    Wraps the precomputed game dataframe + cosine similarity matrix and
-    exposes the same recommendation behavior as the original
-    `recommend_games()` function.
+    Wraps the game dataframe and sparse TF-IDF matrix; computes cosine
+    similarity on demand per request.
     """
 
-    def __init__(self, games: pd.DataFrame, similarity_matrix) -> None:
+    def __init__(self, games: pd.DataFrame, tfidf_matrix: scipy.sparse.csr_matrix) -> None:
         self.games = games
-        self.similarity_matrix = similarity_matrix
+        self.tfidf_matrix = tfidf_matrix
 
     def recommend(self, user_input: str, top_n: int = 10) -> list[dict]:
         """
         Return up to `top_n` games similar to `user_input`.
 
         Raises:
-            ValueError: empty input, or no fuzzy match found, or the
-                matched row's index is out of range.
+            ValueError: empty input, no fuzzy match found, or index out of
+                range — same exception semantics as the original.
         """
         try:
             cleaned_input, best_match = resolve_best_title_match(
@@ -48,13 +56,13 @@ class GameRecommendationEngine:
             if idx < 0 or idx >= len(self.games):
                 raise IndexError(f"Index {idx} is out of range.")
 
-            similar = top_n_similar_indices(self.similarity_matrix[idx], top_n)
+            # On-demand cosine similarity — replaces precomputed matrix row lookup
+            similar = top_n_similar_indices(self.tfidf_matrix, idx, top_n)
 
             results: list[dict] = []
             for i, _score in similar:
                 game_data = self.games.loc[i]
 
-                # Safely split store names and domains into lists, or use empty lists
                 store_names = game_data["store_name"].split(", ")
                 store_domains = game_data["store_domain"].split(", ")
 

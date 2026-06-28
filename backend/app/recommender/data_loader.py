@@ -1,12 +1,24 @@
 """
-Loads the precomputed model artifacts (dataframes + similarity matrices).
+Loads the model artifacts (dataframes + TF-IDF vectorizer + sparse TF-IDF matrix).
 
-This replicates the original `Deployment/app.py` bootstrap: the TF-IDF +
-cosine-similarity artifacts are generated offline (see
-`backend/notebooks/`) and are too large to commit to the repo, so they're
-hosted on Google Drive and fetched once via `gdown` if not already
-present on disk. Results are cached in-process so repeated calls (e.g.
-across requests) don't re-download or re-deserialize.
+What changed from the original
+--------------------------------
+Old: loaded a precomputed cosine-similarity matrix (movies_matrix / games_matrix)
+     — a full N×N float array that was ~1.5 GB combined on disk and in memory.
+
+New: loads three smaller artifacts per domain:
+     - dataset (.pkl)                  → same as before
+     - fitted TfidfVectorizer (.pkl)   → NEW (tiny; ~few MB)
+     - sparse TF-IDF matrix (.npz)     → NEW (sparse; typical size ~50–100 MB)
+
+The cosine similarity for a single item is then computed on-demand per
+request via `cosine_similarity(tfidf_matrix[idx], tfidf_matrix)`.  This
+shifts the work from startup (load a huge dense matrix) to request time
+(one dot-product row operation in ~milliseconds), while keeping TF-IDF
+computation entirely offline.
+
+Everything else is unchanged: the download flow, the lru_cache lifetime,
+and the artifact container interface the engines see.
 """
 from __future__ import annotations
 
@@ -15,8 +27,8 @@ from functools import lru_cache
 from pathlib import Path
 
 import gdown
-import numpy as np
 import pandas as pd
+import scipy.sparse
 
 from app.core.config import Settings, get_settings
 from app.core.logger import get_logger
@@ -37,42 +49,52 @@ def _load_pickle(path: Path):
         return pickle.load(f)
 
 
-def _load_numpy(path: Path):
-    matrix = np.load(path, allow_pickle=True)
-    # Similarity scores only need float32 precision; this halves the
-    # matrix's memory footprint once loaded. Note: this does not reduce
-    # *peak* memory during the load itself — if the on-disk file is
-    # already too large for available RAM, shrink it ahead of time with
-    # scripts/shrink_artifacts.py instead.
-    if matrix.dtype != np.float32:
-        matrix = matrix.astype(np.float32)
+def _load_sparse(path: Path) -> scipy.sparse.csr_matrix:
+    """Load a scipy sparse matrix saved with save_npz and ensure CSR format
+    (required by cosine_similarity for efficient row slicing)."""
+    matrix = scipy.sparse.load_npz(str(path))
+    if not isinstance(matrix, scipy.sparse.csr_matrix):
+        matrix = matrix.tocsr()
     return matrix
 
 
 class RecommenderArtifacts:
-    """Container for the four loaded artifacts needed to serve recommendations."""
+    """
+    Container for the loaded artifacts needed to serve recommendations.
+
+    Attributes
+    ----------
+    movies : pd.DataFrame
+        Preprocessed movie dataset.
+    movies_tfidf : scipy.sparse.csr_matrix
+        Sparse TF-IDF feature matrix for movies (shape: n_movies × vocab).
+    games : pd.DataFrame
+        Preprocessed game dataset.
+    games_tfidf : scipy.sparse.csr_matrix
+        Sparse TF-IDF feature matrix for games (shape: n_games × vocab).
+    """
 
     def __init__(
         self,
         movies: pd.DataFrame,
-        movies_matrix,
+        movies_tfidf: scipy.sparse.csr_matrix,
         games: pd.DataFrame,
-        games_matrix,
+        games_tfidf: scipy.sparse.csr_matrix,
     ) -> None:
         self.movies = movies
-        self.movies_matrix = movies_matrix
+        self.movies_tfidf = movies_tfidf
         self.games = games
-        self.games_matrix = games_matrix
+        self.games_tfidf = games_tfidf
 
 
 def _download_all(settings: Settings) -> dict[str, Path]:
     download_dir = settings.model_dir
 
     targets = {
-        "movies": (settings.MOVIES_DATA_FILE_ID, settings.MOVIES_DATA_FILENAME),
-        "movies_matrix": (settings.MOVIES_SIMILARITY_FILE_ID, settings.MOVIES_SIMILARITY_FILENAME),
-        "games": (settings.GAMES_DATA_FILE_ID, settings.GAMES_DATA_FILENAME),
-        "games_matrix": (settings.GAMES_SIMILARITY_FILE_ID, settings.GAMES_SIMILARITY_FILENAME),
+        "movies":            (settings.MOVIES_DATA_FILE_ID,            settings.MOVIES_DATA_FILENAME),
+        "movies_tfidf":      (settings.MOVIES_TFIDF_FILE_ID,           settings.MOVIES_TFIDF_FILENAME),
+        "games":             (settings.GAMES_DATA_FILE_ID,             settings.GAMES_DATA_FILENAME),
+        "games_tfidf":       (settings.GAMES_TFIDF_FILE_ID,            settings.GAMES_TFIDF_FILENAME),
     }
 
     paths: dict[str, Path] = {}
@@ -84,21 +106,24 @@ def _download_all(settings: Settings) -> dict[str, Path]:
 @lru_cache
 def load_artifacts() -> RecommenderArtifacts:
     """
-    Download (if needed) and load all four recommender artifacts.
+    Download (if needed) and load all recommender artifacts.
 
-    Cached for the lifetime of the process — call this once at FastAPI
-    startup and reuse the result, exactly as the original app's
-    `@st.cache_resource` decorators did for the lifetime of the Streamlit
-    session.
+    Cached for the lifetime of the process — called once at FastAPI
+    startup and reused across all requests.
     """
     settings = get_settings()
     paths = _download_all(settings)
 
     logger.info("Loading recommender artifacts into memory...")
-    movies = _load_pickle(paths["movies"])
-    movies_matrix = _load_pickle(paths["movies_matrix"])
-    games = _load_pickle(paths["games"])
-    games_matrix = _load_numpy(paths["games_matrix"])
-    logger.info("Recommender artifacts loaded: %d movies, %d games", len(movies), len(games))
+    movies      = _load_pickle(paths["movies"])
+    movies_tfidf = _load_sparse(paths["movies_tfidf"])
+    games       = _load_pickle(paths["games"])
+    games_tfidf  = _load_sparse(paths["games_tfidf"])
 
-    return RecommenderArtifacts(movies, movies_matrix, games, games_matrix)
+    logger.info(
+        "Artifacts loaded: %d movies (tfidf %s), %d games (tfidf %s)",
+        len(movies), movies_tfidf.shape,
+        len(games),  games_tfidf.shape,
+    )
+
+    return RecommenderArtifacts(movies, movies_tfidf, games, games_tfidf)
