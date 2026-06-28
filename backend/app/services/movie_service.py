@@ -2,9 +2,13 @@
 Movie service: the business-logic layer between the API routes and the
 recommendation engine.
 
-Keeps route handlers thin — they call `MovieService.get_recommendations()`
-and translate the result into an HTTP response, with no business logic of
-their own.
+What changed from the original
+--------------------------------
+Old: `MovieRecommendationEngine(artifacts.movies, artifacts.movies_matrix)`
+New: `MovieRecommendationEngine(artifacts.movies, artifacts.movies_tfidf)`
+
+Everything else (method names, return types, exception propagation) is
+unchanged.
 """
 from __future__ import annotations
 
@@ -15,7 +19,7 @@ from app.schemas.movie import MovieRecommendationResponse, MovieResult
 
 class MovieService:
     def __init__(self, artifacts: RecommenderArtifacts) -> None:
-        self._engine = MovieRecommendationEngine(artifacts.movies, artifacts.movies_matrix)
+        self._engine = MovieRecommendationEngine(artifacts.movies, artifacts.movies_tfidf)
 
     def get_recommendations(self, title: str, top_n: int = 10) -> MovieRecommendationResponse:
         """

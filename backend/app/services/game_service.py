@@ -1,6 +1,14 @@
 """
 Game service: the business-logic layer between the API routes and the
 recommendation engine.
+
+What changed from the original
+--------------------------------
+Old: `GameRecommendationEngine(artifacts.games, artifacts.games_matrix)`
+New: `GameRecommendationEngine(artifacts.games, artifacts.games_tfidf)`
+
+Everything else (method names, return types, exception propagation) is
+unchanged.
 """
 from __future__ import annotations
 
@@ -11,7 +19,7 @@ from app.schemas.game import GameRecommendationResponse, GameResult
 
 class GameService:
     def __init__(self, artifacts: RecommenderArtifacts) -> None:
-        self._engine = GameRecommendationEngine(artifacts.games, artifacts.games_matrix)
+        self._engine = GameRecommendationEngine(artifacts.games, artifacts.games_tfidf)
 
     def get_recommendations(self, title: str, top_n: int = 10) -> GameRecommendationResponse:
         """
