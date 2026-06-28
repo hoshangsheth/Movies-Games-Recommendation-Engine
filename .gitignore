@@ -1,0 +1,13 @@
+﻿# Local working folder used for downloading/shrinking model artifacts
+# (see scripts/shrink_artifacts.py). These files are hosted on Google
+# Drive and downloaded at runtime via gdown -- they should never be
+# committed to git, regardless of which directory they're staged in.
+artifacts/
+*.pkl
+*.npy
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
