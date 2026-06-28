@@ -18,7 +18,7 @@ export default function Navbar() {
         {/* Brand */}
         <NavLink to="/" className="topbar-brand">
           <span className="topbar-brand-dot" />
-          <span className="topbar-brand-title">CineVerse</span>
+          <span className="topbar-brand-title">FilmOracle</span>
         </NavLink>
 
         {/* Desktop nav links */}
