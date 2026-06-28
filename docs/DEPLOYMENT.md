@@ -61,7 +61,37 @@ prefer deploying the two services independently behind a real load balancer / CD
 docker compose up --build -d
 ```
 
-## Health checks
+## Memory sizing (important)
+
+The four model artifacts are large once loaded into memory — particularly `cosine_sim_games.npy`,
+which on disk is roughly **954 MB** as originally generated (a dense `float64` matrix). Once
+deserialized alongside the movie matrix and both dataframes, total resident memory comfortably
+exceeds **1.5 GB**. This will OOM on any 512 MB instance (Render's Free and Starter tiers, and
+equivalents on other platforms).
+
+Two ways to handle this:
+
+1. **Shrink the artifacts (recommended, no cost increase).** Cosine similarity values don't need
+   float64 precision — converting to `float32` halves memory with zero change to recommendation
+   rankings. Run:
+   ```bash
+   python scripts/shrink_artifacts.py /path/to/artifacts/dir
+   ```
+   against a local copy of the four downloaded files, then re-upload the shrunk
+   `cosine_sim_games.npy` / `cosine_sim_movies.pkl` to Google Drive (updating the file IDs in
+   `core/config.py` if they change). This should bring total memory comfortably under 1 GB.
+
+2. **Use a larger instance.** If you'd rather not regenerate artifacts, size up to an instance with
+   at least 2 GB RAM (e.g. Render's Standard tier). Be aware that loading itself briefly needs
+   memory beyond the final resident size (deserializing a 954 MB float64 array transiently uses
+   more than 954 MB before any downcasting happens), so 2 GB is a safer floor than 1.5 GB.
+
+`app/recommender/data_loader.py` downcasts any loaded `.npy` matrix to `float32` automatically as a
+safety net for artifacts you regenerate in the future — but this happens *after* the file is fully
+deserialized, so it does not by itself prevent an OOM on an already-oversized on-disk file. Shrinking
+the artifact ahead of time (option 1) is what actually fixes a crash on a small instance.
+
+
 
 `GET /api/v1/health` returns `200` once the model artifacts have loaded successfully, and includes
 `movies_loaded` / `games_loaded` counts — wire this into your platform's health-check / readiness probe

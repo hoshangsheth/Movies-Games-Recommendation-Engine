@@ -38,7 +38,15 @@ def _load_pickle(path: Path):
 
 
 def _load_numpy(path: Path):
-    return np.load(path, allow_pickle=True)
+    matrix = np.load(path, allow_pickle=True)
+    # Similarity scores only need float32 precision; this halves the
+    # matrix's memory footprint once loaded. Note: this does not reduce
+    # *peak* memory during the load itself — if the on-disk file is
+    # already too large for available RAM, shrink it ahead of time with
+    # scripts/shrink_artifacts.py instead.
+    if matrix.dtype != np.float32:
+        matrix = matrix.astype(np.float32)
+    return matrix
 
 
 class RecommenderArtifacts:
