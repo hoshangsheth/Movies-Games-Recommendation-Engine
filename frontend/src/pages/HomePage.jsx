@@ -33,10 +33,10 @@ export default function HomePage() {
       {/* CTA buttons */}
       <div className="home-cta-group">
         <button className="home-btn-primary" onClick={() => navigate("/movies")}>
-          Start Exploring <ArrowRight size={16} strokeWidth={2.5} />
+          Explore Cinema <ArrowRight size={16} strokeWidth={2.5} />
         </button>
         <button className="home-btn-secondary" onClick={() => navigate("/games")}>
-          Browse without signing up
+          Ready to Play
         </button>
       </div>
 
