@@ -31,12 +31,14 @@ export default function ContactPage() {
   return (
     <>
       <div className="page-bg-contact" />
-      <Hero
-        eyebrow="Get in Touch"
-        title="Let's"
-        titleAccent="Connect."
-        subtitle="Have feedback, ideas, or just want to say hi? Drop a message below."
-      />
+      <div style={{ maxWidth: "560px", margin: "0 auto" }}>
+        <Hero
+          eyebrow="Get in Touch"
+          title="Let's"
+          titleAccent="Connect."
+          subtitle="Have feedback, ideas, or just want to say hi? Drop a message below."
+        />
+      </div>
 
       <div className="contact-form-wrap">
         {status === STATUS.SUCCESS && (
