@@ -1,82 +1,191 @@
-# Setup & Development
+# FilmOracle Setup Guide
 
-## Prerequisites
+# Overview
 
-- Python 3.12+
+This guide explains how to set up FilmOracle for local development.
+
+FilmOracle consists of:
+
+- React + Vite frontend
+- FastAPI backend
+- Movie and Game recommendation engine
+
+---
+
+# Prerequisites
+
+Install the following before getting started:
+
+- Python 3.11+
 - Node.js 20+
-- Docker & Docker Compose (optional, for containerized run)
-- A Google Cloud service account with Sheets API access (optional, only needed for the contact form)
+- npm
+- Git
 
-## Option A: Run with Docker Compose (recommended)
+(Optional)
 
-From the repo root:
+- Docker Desktop
+
+---
+
+# Clone Repository
 
 ```bash
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
-# edit backend/.env if you want the contact form to work (see "Contact form setup" below)
+git clone <repository-url>
 
-docker compose up --build
+cd FilmOracle
 ```
 
-- Frontend: http://localhost
-- Backend API: http://localhost:8000 (docs at http://localhost:8000/docs)
+---
 
-## Option B: Run locally without Docker
+# Backend Setup
 
-**Backend:**
-```bash
-./scripts/dev_backend.sh
-```
-This creates a virtualenv, installs `backend/requirements.txt`, copies `.env.example` to `.env` if missing,
-and starts `uvicorn` with `--reload` on port 8000.
-
-**Frontend** (in a separate terminal):
-```bash
-./scripts/dev_frontend.sh
-```
-This installs npm dependencies and starts the Vite dev server on port 5173. Vite is configured to proxy
-`/api/*` requests to `http://localhost:8000`, so no CORS configuration is needed in local dev.
-
-## Contact form setup
-
-The contact form writes submissions to a Google Sheet, exactly as the original Streamlit app did. To
-enable it:
-
-1. Create a Google Cloud service account with access to the Sheets API and Drive API.
-2. Share the target spreadsheet with that service account's email address (Editor access).
-3. Download the service account's JSON key.
-4. Set `GOOGLE_SERVICE_ACCOUNT_JSON` in `backend/.env` to either:
-   - the file path to that JSON key, or
-   - the raw JSON content itself (useful when injecting via a CI/CD secret).
-5. Update `CONTACT_SHEET_KEY` in `backend/app/core/config.py` (or via env var) if you're using a different
-   spreadsheet than the original.
-
-If this isn't configured, every other feature still works — only `POST /api/v1/contact` will return a
-502 until credentials are set.
-
-## Running tests
+Navigate to the backend directory.
 
 ```bash
 cd backend
-source .venv/bin/activate
-pytest
 ```
 
-The test suite covers the text-normalization helpers, the similarity ranking logic, and both
-recommendation engines (alias resolution, fuzzy matching, store-link formatting, trailer URL building,
-and error handling) against small synthetic fixtures in `tests/conftest.py`.
+Create a virtual environment.
 
-## Linting
+```bash
+python -m venv .venv
+```
+
+Activate it.
+
+Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+macOS/Linux
+
+```bash
+source .venv/bin/activate
+```
+
+Install dependencies.
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the backend.
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Backend default URL
+
+```
+http://localhost:8000
+```
+
+---
+
+# Frontend Setup
+
+Navigate to frontend.
 
 ```bash
 cd frontend
-npm run lint
 ```
 
-## Working with the notebooks
+Install packages.
 
-`backend/notebooks/` contains the offline data-collection and model-building notebooks, unchanged from
-the original project. Re-running them regenerates the four pickled/`.npy` artifacts that the backend
-downloads at startup. If you regenerate them, re-upload to Google Drive and update the corresponding
-`*_FILE_ID` values in `backend/app/core/config.py`.
+```bash
+npm install
+```
+
+Start development server.
+
+```bash
+npm run dev
+```
+
+Default frontend URL
+
+```
+http://localhost:5173
+```
+
+---
+
+# Environment Variables
+
+Create a `.env` file if required by the project.
+
+Typical variables include:
+
+```
+API_BASE_URL=
+TMDB_API_KEY=
+RAWG_API_KEY=
+```
+
+Only include variables that are actually used in the implementation.
+
+---
+
+# Docker
+
+Build the application.
+
+```bash
+docker compose up --build
+```
+
+Stop containers.
+
+```bash
+docker compose down
+```
+
+---
+
+# Development Workflow
+
+1. Start backend.
+2. Start frontend.
+3. Open browser.
+4. Search movies or games.
+5. Verify API responses.
+6. Test contact form.
+
+---
+
+# Troubleshooting
+
+## Backend won't start
+
+- Verify Python version.
+- Activate the virtual environment.
+- Install requirements again.
+
+## Frontend won't connect
+
+- Ensure backend is running.
+- Verify API URL.
+- Check CORS configuration.
+
+## Missing packages
+
+Run:
+
+```bash
+pip install -r requirements.txt
+
+npm install
+```
+
+---
+
+# Next Steps
+
+After setup is complete:
+
+- Read `ARCHITECTURE.md`
+- Explore `API.md`
+- Review `DEPLOYMENT.md`
