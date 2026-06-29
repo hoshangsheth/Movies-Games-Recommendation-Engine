@@ -2,20 +2,10 @@ import { NavLink } from "react-router-dom";
 import { Sparkles, Sun, Moon, Home, Film, Gamepad2, Mail } from "lucide-react";
 import "./Navbar.css";
 
-const NAV_LEFT = [
-  { to: "/", label: "Home", icon: Home, end: true },
-  { to: "/movies", label: "Movies", icon: Film },
-];
-
-const NAV_RIGHT = [
-  { to: "/games", label: "Games", icon: Gamepad2 },
-  { to: "/contact", label: "Contact", icon: Mail },
-];
-
 export default function Navbar({ isDark, onToggleTheme }) {
   return (
     <>
-      {/* ── Desktop topbar (unchanged) ── */}
+      {/* ── Desktop topbar ── */}
       <header className="topbar">
         <div className="topbar-inner">
           <NavLink to="/" className="topbar-brand">
@@ -26,7 +16,12 @@ export default function Navbar({ isDark, onToggleTheme }) {
           </NavLink>
 
           <nav className="topbar-nav">
-            {[...NAV_LEFT, ...NAV_RIGHT].map((item) => (
+            {[
+              { to: "/", label: "Home", end: true },
+              { to: "/movies", label: "Movies" },
+              { to: "/games", label: "Games" },
+              { to: "/contact", label: "Contact" },
+            ].map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -55,41 +50,49 @@ export default function Navbar({ isDark, onToggleTheme }) {
       {/* ── Mobile floating bottom nav ── */}
       <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
         <div className="mobile-bottom-nav-pill">
-          {NAV_LEFT.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={({ isActive }) =>
-                `mbn-item${isActive ? " active" : ""}`
-              }
-            >
-              <item.icon size={22} strokeWidth={1.8} />
-              <span className="mbn-label">{item.label}</span>
-            </NavLink>
-          ))}
 
-          {/* Center accent — theme toggle */}
+          {/* Slot 1 — Theme toggle */}
           <button
-            className="mbn-center"
+            className="mbn-item mbn-theme"
             onClick={onToggleTheme}
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           >
-            {isDark ? <Sun size={20} strokeWidth={2} /> : <Moon size={20} strokeWidth={2} />}
+            {isDark ? <Sun size={22} strokeWidth={1.8} /> : <Moon size={22} strokeWidth={1.8} />}
+            <span className="mbn-label">{isDark ? "Light" : "Dark"}</span>
           </button>
 
-          {NAV_RIGHT.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `mbn-item${isActive ? " active" : ""}`
-              }
-            >
-              <item.icon size={22} strokeWidth={1.8} />
-              <span className="mbn-label">{item.label}</span>
-            </NavLink>
-          ))}
+          {/* Slot 2 — Movies */}
+          <NavLink
+            to="/movies"
+            className={({ isActive }) => `mbn-item${isActive ? " active" : ""}`}
+          >
+            <Film size={22} strokeWidth={1.8} />
+            <span className="mbn-label">Movies</span>
+          </NavLink>
+
+          {/* Slot 3 — Center: Home with gradient */}
+          <NavLink to="/" end className="mbn-center" aria-label="Home">
+            <Home size={20} strokeWidth={2} />
+          </NavLink>
+
+          {/* Slot 4 — Games */}
+          <NavLink
+            to="/games"
+            className={({ isActive }) => `mbn-item${isActive ? " active" : ""}`}
+          >
+            <Gamepad2 size={22} strokeWidth={1.8} />
+            <span className="mbn-label">Games</span>
+          </NavLink>
+
+          {/* Slot 5 — Contact */}
+          <NavLink
+            to="/contact"
+            className={({ isActive }) => `mbn-item${isActive ? " active" : ""}`}
+          >
+            <Mail size={22} strokeWidth={1.8} />
+            <span className="mbn-label">Contact</span>
+          </NavLink>
+
         </div>
       </nav>
     </>
