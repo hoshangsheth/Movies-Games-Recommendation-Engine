@@ -56,7 +56,7 @@ export default function Navbar() {
             />
           </a>
           <a
-            href="https://hoshang-portfolio-ai.vercel.app"
+            href="https://www.hoshangsheth.com"
             target="_blank"
             rel="noreferrer"
             className="topbar-cta-btn"
