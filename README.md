@@ -1,126 +1,208 @@
-# 🎬 Movies & Games 🎮 Recommendation Engine
+# 🎬 FilmOracle
 
-A content-based recommendation system that lets you search for movies and games — then delivers
-personalized, relevant suggestions based on your input. Powered by cosine similarity on
-**TF-IDF vectorized features** and enhanced with smart fuzzy search for seamless, intuitive matching.
+<div align="center">
 
-This repository is a **production-grade monorepo refactor** of the original Streamlit prototype: the
-same recommendation engine and 100% of the same functionality, now split into a FastAPI backend and a
-React frontend with proper separation of concerns, tests, Docker support, and documentation.
+# Find Your Next Obsession.
 
----
+**AI-Powered Entertainment Recommendation Platform**
 
-## 📌 Features
+FilmOracle is a modern AI-powered entertainment recommendation platform that helps users discover their next favorite **movies** and **games** using Machine Learning based **content-based filtering** and **cosine similarity**.
 
-🔍 **Smart Search with Aliases & Fuzzy Matching**
-🧠 **Cosine Similarity-Based Recommendations**
-🎞️ **Movies**: Posters, trailers, cast pictures, descriptions, genres, watch links, and ratings
-🕹️ **Games**: Store links, developer/publisher, tags, ESRB ratings, website, and screenshots
-🎨 **CineVerse UI**: Dark, purple-accented theme with animated transitions and a responsive sidebar
-🧭 **Intuitive Navigation**: Home, Recommend Movies, Recommend Games, and Contact pages
-📩 **Google Sheets Integration** for the contact form
-🧪 **Tested recommendation engine**, decoupled from any web framework
-🐳 **Docker-ready**, with a `docker-compose.yml` for one-command local deployment
+Built with a production-ready **FastAPI + React (Vite)** architecture, FilmOracle showcases clean software engineering practices, modular backend design, and an elegant user experience.
+
+![License](https://img.shields.io/badge/License-MIT-green)
+![Python](https://img.shields.io/badge/Python-3.11+-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
+![React](https://img.shields.io/badge/React-Vite-61DAFB)
+![Status](https://img.shields.io/badge/Status-Active-success)
+
+</div>
 
 ---
 
-## 🏗️ Architecture
+# ✨ Features
 
-```
-React (Frontend)  →  FastAPI (Backend)  →  Service Layer  →  Recommendation Engine  →  Precomputed Artifacts
-```
-
-```
-movies-games-recommendation-engine/
-├── backend/             FastAPI app: API routes, services, recommendation engine, tests
-│   ├── app/
-│   │   ├── api/         Route handlers + dependency injection (HTTP only, no business logic)
-│   │   ├── core/        Config, alias dictionaries, logging
-│   │   ├── recommender/ The engine itself: preprocessing, similarity lookup, movie/game engines
-│   │   ├── services/    Business logic between routes and the engine
-│   │   └── schemas/     Pydantic request/response models
-│   ├── data/             Raw movie/game CSVs
-│   ├── notebooks/        Offline TF-IDF + cosine-similarity model building
-│   └── tests/             Unit tests for the engine and utilities
-├── frontend/            React + Vite SPA
-│   └── src/
-│       ├── components/   Navbar, Hero, SearchBar, RecommendationCard/Grid, detail modals, etc.
-│       ├── pages/         Home, Movies, Games, Contact
-│       ├── hooks/          useRecommendations — search state management
-│       └── services/       api.js — the only file that talks to the backend
-├── docs/                 Architecture, API, setup, and deployment docs
-├── scripts/               Local dev convenience scripts
-└── docker-compose.yml
-```
-
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full breakdown of how requests flow through
-the system and why it's structured this way.
+- 🎬 Movie Recommendation Engine
+- 🎮 Game Recommendation Engine
+- ⚡ Lightning-fast recommendations using TF-IDF + Cosine Similarity
+- 🔎 Smart title search
+- 🎭 Rich Movie Details Modal
+- 🕹 Rich Game Details Modal
+- ▶ Embedded trailers
+- 🛒 Game store links
+- 📱 Responsive modern UI
+- 🌙 Light/Dark mode
+- 📩 WhatsApp Contact Form
+- 🐳 Docker Ready
+- 🚀 Vercel + Render Deployment
 
 ---
 
-## 🧠 Recommendation Logic
+# 🖼 Application Preview
 
-- **Data Cleaning & Preprocessing**: Titles cleaned using regex (`app/utils/text.py`)
-- **Fuzzy Search**: Implemented via `rapidfuzz` to handle partial and alias-based searches
-- **Similarity Computation**: Precomputed Cosine Similarity Matrix (Pickle + Numpy), built offline in
-  `backend/notebooks/`
-- **Smart Aliasing**: Robust dictionaries for common abbreviations (e.g., "ZNMD" → *Zindagi Na Milegi
-  Dobara*), kept in `app/core/constants.py`
-- **Metadata Enhancement**: Enriched recommendations with trailers, store links, cast, ratings,
-  screenshots, etc.
+## 🏠 Home
 
-The recommendation algorithm itself is unchanged from the original project — this refactor is about
-*where the code lives and how it's organized*, not about how recommendations are computed.
+![Home](images/HomePage.png)
 
 ---
 
-## 🛠️ Tech Stack
+## 🎬 Movies
 
-| Layer | Tools |
-|---|---|
-| Backend | FastAPI, Pydantic, Uvicorn |
-| Frontend | React, Vite, React Router |
-| Data / ML | Pandas, NumPy, RapidFuzz, scikit-learn (offline, in notebooks) |
-| Storage | Pickle / `.npy` similarity matrices, downloaded via `gdown` |
-| Integrations | Google Sheets (`gspread`) for the contact form |
-| Infra | Docker, Docker Compose, nginx |
-| Testing | pytest |
+![Movies](images/MoviePage.png)
 
 ---
 
-## 🚀 Getting Started
+## 🎬 Movie Details
 
-**With Docker Compose:**
-```bash
-git clone https://github.com/hoshangsheth/Movies-Games-Recommendation-Engine.git
-cd Movies-Games-Recommendation-Engine
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
-docker compose up --build
-```
-Frontend: http://localhost · Backend docs: http://localhost:8000/docs
+![Movie Details](images/MovieDetails.png)
 
-**Without Docker:**
-```bash
-./scripts/dev_backend.sh    # terminal 1 — FastAPI on :8000
-./scripts/dev_frontend.sh   # terminal 2 — Vite on :5173
+---
+
+## 🎮 Games
+
+![Games](images/GamesPage.png)
+
+---
+
+## 🎮 Game Details
+
+![Game Details](images/GamesDetails.png)
+
+---
+
+## 📩 Contact
+
+![Contact](images/ContactPage.png)
+
+---
+
+# 🏗 Architecture
+
+```text
+                    FilmOracle
+
+              React + Vite Frontend
+                      │
+                      ▼
+                 FastAPI REST API
+                      │
+        ┌─────────────┴─────────────┐
+        ▼                           ▼
+ Recommendation Service      Contact Service
+        │
+        ▼
+ Recommendation Engine
+        │
+        ▼
+ TF-IDF Vectorizer
+        │
+        ▼
+ Cosine Similarity Matrix
+        │
+        ▼
+ Movie/Game Dataset
 ```
 
-Full setup, contact-form configuration, and test instructions: [`docs/SETUP.md`](docs/SETUP.md)
-Deployment instructions: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md)
-API reference: [`docs/API.md`](docs/API.md)
+---
+
+# 🔄 Recommendation Pipeline
+
+```text
+User Search
+      │
+      ▼
+Title Validation
+      │
+      ▼
+Alias Resolution
+      │
+      ▼
+Dataset Lookup
+      │
+      ▼
+Cosine Similarity
+      │
+      ▼
+Top 10 Recommendations
+      │
+      ▼
+Metadata Enrichment
+      │
+      ▼
+API Response
+      │
+      ▼
+React UI
+```
 
 ---
 
-## 📈 Why This Project?
+# 🛠 Tech Stack
 
-Blending NLP techniques like TF-IDF with classic ML similarity measures and real-time API data fetching,
-this project showcases how to build scalable, intelligent recommendation engines — and, in its current
-form, how to take that engine out of a notebook-adjacent script and structure it the way a real product
-backend would be structured: layered, tested, documented, and containerized.
+| Layer | Technologies |
+|-------|--------------|
+| Frontend | React, Vite, CSS |
+| Backend | FastAPI |
+| Recommendation | TF-IDF, Cosine Similarity |
+| Language | Python |
+| Deployment | Docker, Render, Vercel |
 
 ---
 
-## 📄 License
+# 📚 Documentation
 
-[MIT](LICENSE)
+Detailed project documentation is available inside the **docs/** folder.
+
+- ARCHITECTURE.md
+- API.md
+- SETUP.md
+- DEPLOYMENT.md
+
+---
+
+# 🗺 Roadmap
+
+## Completed
+
+- Modern React UI
+- FastAPI Backend
+- Movie Recommendation Engine
+- Game Recommendation Engine
+- Rich Detail Modals
+- Docker Support
+- Production Folder Structure
+
+## Planned
+
+- User Accounts
+- Personalized Recommendations
+- Mood-based Recommendations
+- LLM Integration
+- Vector Search
+- Watchlists
+- Recommendation History
+- Analytics Dashboard
+
+---
+
+# 💼 Why FilmOracle?
+
+FilmOracle is more than a recommendation engine.
+
+It demonstrates:
+
+- Production-grade backend architecture
+- REST API development
+- Recommendation Systems
+- Machine Learning application
+- Frontend engineering
+- Deployment workflows
+- Software architecture best practices
+
+---
+
+# 📄 License
+
+Licensed under the MIT License.
+
+Built with ❤️ by **Hoshang Sheth**
