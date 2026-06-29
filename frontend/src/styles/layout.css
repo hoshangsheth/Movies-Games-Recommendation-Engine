@@ -1,23 +1,35 @@
 .app-shell {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
 .app-content {
   flex: 1;
-  margin-left: 260px;
+  margin-top: 64px; /* topbar height */
   padding: 0 56px;
   max-width: 1280px;
-  position: relative;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  /* keep topbar offset */
+  padding-top: 0;
+  box-sizing: border-box;
+}
+
+/* Re-add topbar offset explicitly so margin shorthand doesn't override */
+.app-content {
+  margin-top: 64px;
 }
 
 @media (max-width: 860px) {
   .app-content {
-    margin-left: 0;
     padding: 0 24px;
+    margin-top: 64px;
   }
 }
 
+/* Page background blobs — unchanged */
 .page-bg-home {
   background: radial-gradient(ellipse at 20% 50%, rgba(76, 29, 149, 0.15) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 20%, rgba(99, 20, 120, 0.1) 0%, transparent 50%);

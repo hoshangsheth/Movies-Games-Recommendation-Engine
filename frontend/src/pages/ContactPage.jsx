@@ -1,27 +1,25 @@
 import { useState } from "react";
 import Footer from "../components/Footer";
-import { submitContactForm, ApiError } from "../services/api";
 import "../styles/layout.css";
 import "./ContactPage.css";
 
 const STATUS = {
   IDLE: "idle",
-  SUBMITTING: "submitting",
   SUCCESS: "success",
-  ERROR: "error",
   INCOMPLETE: "incomplete",
 };
+
+const WHATSAPP_NUMBER = "919004001598";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState(STATUS.IDLE);
-  const [errorMessage, setErrorMessage] = useState("");
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
 
     if (!form.name || !form.email || !form.message) {
@@ -29,15 +27,13 @@ export default function ContactPage() {
       return;
     }
 
-    setStatus(STATUS.SUBMITTING);
-    try {
-      await submitContactForm(form);
-      setStatus(STATUS.SUCCESS);
-      setForm({ name: "", email: "", message: "" });
-    } catch (err) {
-      setErrorMessage(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
-      setStatus(STATUS.ERROR);
-    }
+    const text = `Hi, I'm ${form.name} (${form.email}).\n\n${form.message}`;
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+
+    window.open(url, "_blank", "noopener,noreferrer");
+
+    setStatus(STATUS.SUCCESS);
+    setForm({ name: "", email: "", message: "" });
   }
 
   return (
@@ -50,16 +46,17 @@ export default function ContactPage() {
           Have feedback, ideas, or just want to say hi? Drop a message below.
         </p>
       </div>
-
       <div className="contact-form-wrap">
         {status === STATUS.SUCCESS && (
-          <div className="contact-success">Message sent. I'll get back to you soon.</div>
+          <div className="contact-success">
+            WhatsApp opened with your message. Talk soon!
+          </div>
         )}
-        {status === STATUS.ERROR && <div className="error-banner">{errorMessage}</div>}
         {status === STATUS.INCOMPLETE && (
-          <div className="contact-warning">Please fill in all fields before submitting.</div>
+          <div className="contact-warning">
+            Please fill in all fields before submitting.
+          </div>
         )}
-
         <form onSubmit={handleSubmit}>
           <div className="contact-field">
             <label htmlFor="contact-name">Name</label>
@@ -90,12 +87,11 @@ export default function ContactPage() {
               onChange={(e) => updateField("message", e.target.value)}
             />
           </div>
-          <button className="contact-submit" type="submit" disabled={status === STATUS.SUBMITTING}>
-            {status === STATUS.SUBMITTING ? "Sending…" : "Send Message →"}
+          <button className="contact-submit" type="submit">
+            Send via WhatsApp →
           </button>
         </form>
       </div>
-
       <Footer />
     </>
   );
