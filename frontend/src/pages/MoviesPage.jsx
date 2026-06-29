@@ -21,7 +21,7 @@ export default function MoviesPage() {
         eyebrow="Cinema Discovery"
         title="Lights. Camera."
         titleAccent="Discover."
-        subtitle="Enter a film you love and we'll surface 10 titles you'll want to watch next — across Bollywood, Hollywood, and beyond."
+        subtitle="Enter a film you love and it'll surface 10 titles you'll want to watch next across Bollywood, Hollywood, and beyond."
       />
 
       <SearchBar
