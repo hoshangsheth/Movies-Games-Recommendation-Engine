@@ -58,3 +58,9 @@
   color: var(--text-heading);
   margin-bottom: 16px;
 }
+
+@media (max-width: 680px) {
+  .app-content {
+    padding-bottom: 90px;
+  }
+}
