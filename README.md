@@ -205,4 +205,4 @@ It demonstrates:
 
 Licensed under the MIT License.
 
-Built with ❤️ by **Hoshang Sheth**
+Built by **Hoshang Sheth**
