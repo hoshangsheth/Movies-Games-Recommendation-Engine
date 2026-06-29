@@ -101,3 +101,41 @@ a:focus-visible {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ══════════════════════════════════════════
+   Dark mode — append to bottom of theme.css
+   ══════════════════════════════════════════ */
+
+[data-theme="dark"] {
+  /* ── Backgrounds ── */
+  --bg-base: #0d0d1a;
+  --bg-page: linear-gradient(160deg, #0d0d1a 0%, #130d20 35%, #0f0d1f 65%, #120d1e 100%);
+
+  /* ── Text ── */
+  --text-primary: #e2e2f0;
+  --text-heading: #f0f0ff;
+  --text-muted: #9090b0;
+  --text-faint: #6060808;
+
+  /* ── Glass / surfaces ── */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-strong: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-border-soft: rgba(168, 85, 247, 0.20);
+  --surface-1: rgba(255, 255, 255, 0.04);
+  --surface-2: rgba(255, 255, 255, 0.07);
+  --surface-border: rgba(255, 255, 255, 0.08);
+  --surface-shadow: rgba(168, 85, 247, 0.15);
+
+  /* ── Shadows ── */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.40), 0 1px 4px rgba(0, 0, 0, 0.20);
+  --shadow-card-hover: 0 12px 40px rgba(168, 85, 247, 0.25), 0 4px 12px rgba(0, 0, 0, 0.30);
+  --shadow-navbar: 0 2px 24px rgba(0, 0, 0, 0.40);
+  --shadow-btn: 0 4px 20px rgba(249, 115, 22, 0.35);
+  --shadow-btn-hover: 0 8px 32px rgba(249, 115, 22, 0.50);
+}
+
+[data-theme="dark"] html,
+[data-theme="dark"] body {
+  background: #0d0d1a;
+}

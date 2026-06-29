@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Sparkles, Film, Gamepad2, Phone, Home, Menu, X } from "lucide-react";
+import { Sparkles, Menu, X, Sun, Moon } from "lucide-react";
 import "./Navbar.css";
 
 const NAV_ITEMS = [
@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { to: "/contact", label: "Contact" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ isDark, onToggleTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -40,29 +40,15 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop right */}
+        {/* Desktop right — dark mode toggle only */}
         <div className="topbar-right">
-          <a
-            href="https://github.com/hoshangsheth"
-            target="_blank"
-            rel="noreferrer"
-            className="topbar-icon-btn"
-            aria-label="GitHub"
+          <button
+            className="topbar-theme-toggle"
+            onClick={onToggleTheme}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           >
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/733/733553.png"
-              alt="GitHub"
-              style={{ width: 18, height: 18, filter: "opacity(0.6)" }}
-            />
-          </a>
-          <a
-            href="https://www.hoshangsheth.com"
-            target="_blank"
-            rel="noreferrer"
-            className="topbar-cta-btn"
-          >
-            Portfolio
-          </a>
+            {isDark ? <Sun size={17} strokeWidth={2} /> : <Moon size={17} strokeWidth={2} />}
+          </button>
         </div>
 
         {/* Mobile hamburger */}
@@ -91,6 +77,14 @@ export default function Navbar() {
               {item.label}
             </NavLink>
           ))}
+          {/* Dark mode toggle in mobile menu too */}
+          <button
+            className="topbar-mobile-theme-toggle"
+            onClick={onToggleTheme}
+          >
+            {isDark ? <Sun size={15} strokeWidth={2} /> : <Moon size={15} strokeWidth={2} />}
+            {isDark ? "Light Mode" : "Dark Mode"}
+          </button>
         </nav>
       )}
     </header>
