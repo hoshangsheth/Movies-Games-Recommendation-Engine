@@ -118,6 +118,7 @@
 /* ── Mobile: hide topbar entirely ── */
 @media (max-width: 680px) {
   .topbar {
+    position: fixed;
     background: transparent;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
