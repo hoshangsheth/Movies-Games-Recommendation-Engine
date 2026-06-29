@@ -341,53 +341,39 @@
    Screenshot carousel
    ══════════════════════════════════════════ */
 
-.modal-screenshots-wrap {
+.modal-screenshots-scroll {
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.25) transparent;
 }
 
-.modal-screenshot {
-  width: 100%;
+.modal-screenshots-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+.modal-screenshots-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-screenshots-scroll::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.25);
+  border-radius: 2px;
+}
+
+.modal-screenshot-thumb {
+  height: 150px;
+  width: auto;
+  flex-shrink: 0;
   border-radius: var(--radius-md);
   object-fit: cover;
   box-shadow: var(--shadow-card);
-  display: block;
-  max-height: 220px;
-}
-
-.modal-screenshot-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.modal-screenshot-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(168, 85, 247, 0.08);
-  border: 1px solid rgba(168, 85, 247, 0.18);
-  color: var(--text-heading);
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: background 0.15s;
-}
-.modal-screenshot-btn:hover { background: rgba(168, 85, 247, 0.16); }
-.modal-screenshot-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
+  transition: transform 0.15s;
 }
 
-.modal-screenshot-counter {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  font-weight: 500;
+.modal-screenshot-thumb:hover {
+  transform: scale(1.02);
 }
 
 /* ── Scrollbar inside panel ── */
