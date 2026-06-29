@@ -35,8 +35,8 @@ export default function HomePage() {
         <button className="home-btn-primary" onClick={() => navigate("/movies")}>
           Explore Cinema <ArrowRight size={16} strokeWidth={2.5} />
         </button>
-        <button className="home-btn-secondary" onClick={() => navigate("/games")}>
-          Ready to Play
+        <button className="home-btn-primary" onClick={() => navigate("/games")}>
+          Ready to Play <ArrowRight size={16} strokeWidth={2.5} />
         </button>
       </div>
 
