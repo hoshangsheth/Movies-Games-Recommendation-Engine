@@ -5,14 +5,14 @@ import Footer from "../components/Footer";
 import "../styles/layout.css";
 import "./HomePage.css";
 
-const MOODS = [
-  { emoji: "😄", label: "Happy", sub: "Feel-good picks" },
-  { emoji: "🚀", label: "Excited", sub: "High energy fun", active: true },
-  { emoji: "🍿", label: "Relaxed", sub: "Sit back & unwind" },
-  { emoji: "🌧️", label: "Sad", sub: "Emotional stories" },
-  { emoji: "🔮", label: "Curious", sub: "Mind-bending picks" },
-  { emoji: "🎃", label: "Scared", sub: "Thrilling & spooky" },
-];
+// const MOODS = [
+//   { emoji: "😄", label: "Happy", sub: "Feel-good picks" },
+//   { emoji: "🚀", label: "Excited", sub: "High energy fun", active: true },
+//   { emoji: "🍿", label: "Relaxed", sub: "Sit back & unwind" },
+//   { emoji: "🌧️", label: "Sad", sub: "Emotional stories" },
+//   { emoji: "🔮", label: "Curious", sub: "Mind-bending picks" },
+//   { emoji: "🎃", label: "Scared", sub: "Thrilling & spooky" },
+// ];
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ export default function HomePage() {
       </div>
 
       {/* Mood section */}
-      <section className="mood-section">
+      {/* <section className="mood-section">
         <div className="mood-header">
           <div className="hero-eyebrow" style={{ display:"inline-flex", marginBottom:"12px" }}>
             ✨ &nbsp; AI-Powered Recommendations
@@ -77,7 +77,7 @@ export default function HomePage() {
             🎲 Surprise Me
           </button>
         </div>
-      </section>
+      </section> */}
 
       {/* Feature cards */}
       <section className="feature-cards">
