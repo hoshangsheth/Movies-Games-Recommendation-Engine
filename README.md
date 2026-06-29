@@ -4,9 +4,9 @@
 
 # Find Your Next Obsession.
 
-**AI-Powered Entertainment Recommendation Platform**
+**ML-Powered Entertainment Recommendation Platform**
 
-FilmOracle is a modern AI-powered entertainment recommendation platform that helps users discover their next favorite **movies** and **games** using Machine Learning based **content-based filtering** and **cosine similarity**.
+FilmOracle is a ML-powered entertainment recommendation platform that helps users discover their next favorite **movies** and **games** using Machine Learning based **content-based filtering** and **cosine similarity**.
 
 Built with a production-ready **FastAPI + React (Vite)** architecture, FilmOracle showcases clean software engineering practices, modular backend design, and an elegant user experience.
 
