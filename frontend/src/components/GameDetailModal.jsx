@@ -166,31 +166,17 @@ export default function GameDetailModal({ game, onClose }) {
           {screenshots.length > 0 && (
             <>
               <hr className="modal-divider" />
-              <div className="modal-screenshots-wrap">
+              <div>
                 <p className="modal-section-heading">Screenshots</p>
-                <img
-                  className="modal-screenshot"
-                  src={screenshots[screenshotIndex]}
-                  alt={`${game.Title} screenshot ${screenshotIndex + 1}`}
-                />
-                <div className="modal-screenshot-controls">
-                  <button
-                    className="modal-screenshot-btn"
-                    onClick={showPrev}
-                    disabled={screenshots.length <= 1}
-                  >
-                    ← Prev
-                  </button>
-                  <span className="modal-screenshot-counter">
-                    {screenshotIndex + 1} / {screenshots.length}
-                  </span>
-                  <button
-                    className="modal-screenshot-btn"
-                    onClick={showNext}
-                    disabled={screenshots.length <= 1}
-                  >
-                    Next →
-                  </button>
+                <div className="modal-screenshots-scroll">
+                  {screenshots.map((src, i) => (
+                    <img
+                      key={i}
+                      className="modal-screenshot-thumb"
+                      src={src}
+                      alt={`${game.Title} screenshot ${i + 1}`}
+                    />
+                  ))}
                 </div>
               </div>
             </>
