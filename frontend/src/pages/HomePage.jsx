@@ -24,10 +24,10 @@ export default function HomePage() {
       {/* Hero */}
       <Hero
         variant="home"
-        eyebrow="AI-Powered Discovery Engine"
+        eyebrow="ML-Powered Discovery Engine"
         title="Find your next"
         titleAccent="obsession."
-        subtitle="Get AI recommendations for movies and games tailored to your taste. Discover hidden gems, trending titles, and all-time classics — in one place."
+        subtitle="Get ML-powered recommendations for movies and games tailored to your taste. Discover hidden gems, trending titles, and all-time classics in one place."
       />
 
       {/* CTA buttons */}
