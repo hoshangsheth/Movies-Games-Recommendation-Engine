@@ -1,27 +1,29 @@
-/* ── Topbar shell ─────────────────────────────────────────── */
+/* ── Topbar shell (floating glass) ── */
 .topbar {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
+  max-width: 1200px;
   z-index: 100;
-  padding: 0 24px;
-  background: rgba(8, 8, 16, 0.72);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid var(--surface-border);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-navbar);
 }
 
 .topbar-inner {
   display: flex;
   align-items: center;
-  height: 64px;
-  max-width: 1280px;
-  margin: 0 auto;
-  gap: 40px;
+  height: 56px;
+  padding: 0 20px;
+  gap: 32px;
 }
 
-/* ── Brand ────────────────────────────────────────────────── */
+/* ── Brand ── */
 .topbar-brand {
   display: flex;
   align-items: center;
@@ -30,150 +32,153 @@
   flex-shrink: 0;
 }
 
-.topbar-brand-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-indigo));
-  box-shadow: 0 0 8px rgba(192, 132, 252, 0.6);
+.topbar-brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--grad-cta);
+  color: white;
   flex-shrink: 0;
 }
 
 .topbar-brand-title {
   font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-heading-soft);
-  letter-spacing: 0.02em;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  letter-spacing: -0.02em;
 }
 
-/* ── Desktop nav links ────────────────────────────────────── */
+/* ── Desktop nav ── */
 .topbar-nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
 }
 
 .topbar-link {
   color: var(--text-muted);
   font-family: var(--font-body);
-  font-size: 0.88rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+  font-size: 0.875rem;
+  font-weight: 500;
   text-decoration: none;
-  padding: 6px 14px;
-  border-radius: var(--radius-md);
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
   border: 1px solid transparent;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: all 0.18s ease;
 }
 
 .topbar-link:hover {
-  color: var(--text-heading-soft);
-  background: var(--accent-purple-08);
+  color: var(--text-heading);
+  background: rgba(168,85,247,0.08);
 }
 
 .topbar-link.active {
-  color: var(--text-heading-soft);
-  background: var(--accent-purple-12);
-  border-color: var(--accent-purple-20);
-  font-weight: 500;
+  color: var(--accent-purple);
+  background: rgba(168,85,247,0.10);
+  border-color: rgba(168,85,247,0.20);
+  font-weight: 600;
 }
 
-/* ── Social icons ─────────────────────────────────────────── */
-.topbar-social {
+/* ── Right side ── */
+.topbar-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
-.topbar-social a {
-  opacity: 0.45;
-  transition: opacity 0.2s ease;
+.topbar-icon-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.05);
+  transition: background 0.15s;
+  text-decoration: none;
 }
 
-.topbar-social a:hover {
-  opacity: 1;
+.topbar-icon-btn:hover { background: rgba(0,0,0,0.1); }
+
+.topbar-cta-btn {
+  background: var(--grad-cta);
+  color: white;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 7px 18px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: opacity 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
 }
 
-.topbar-social img {
-  width: 18px;
-  height: 18px;
+.topbar-cta-btn:hover {
+  opacity: 0.9;
+  box-shadow: var(--shadow-btn);
 }
 
-/* ── Hamburger (mobile only) ──────────────────────────────── */
+/* ── Hamburger ── */
 .topbar-hamburger {
   display: none;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 5px;
-  background: none;
+  background: rgba(0,0,0,0.06);
   border: none;
+  border-radius: 10px;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
+  color: var(--text-heading);
   margin-left: auto;
   flex-shrink: 0;
 }
 
-.topbar-hamburger span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--text-muted);
-  border-radius: 2px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.topbar-hamburger.open span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-.topbar-hamburger.open span:nth-child(2) {
-  opacity: 0;
-}
-.topbar-hamburger.open span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-/* ── Mobile dropdown ──────────────────────────────────────── */
+/* ── Mobile dropdown ── */
 .topbar-mobile-menu {
-  display: none;
+  display: flex;
   flex-direction: column;
-  padding: 8px 0 12px;
-  border-top: 1px solid var(--surface-border-soft);
+  padding: 8px 12px 12px;
+  border-top: 1px solid rgba(168,85,247,0.1);
+  gap: 2px;
 }
 
 .topbar-mobile-link {
   color: var(--text-muted);
   font-family: var(--font-body);
   font-size: 0.9rem;
+  font-weight: 500;
   text-decoration: none;
   padding: 10px 16px;
   border-radius: var(--radius-md);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 .topbar-mobile-link:hover,
 .topbar-mobile-link.active {
-  color: var(--text-heading-soft);
-  background: var(--accent-purple-10);
+  color: var(--accent-purple);
+  background: rgba(168,85,247,0.08);
 }
 
-/* ── Responsive ───────────────────────────────────────────── */
+/* ── Responsive ── */
 @media (max-width: 680px) {
+  .topbar {
+    top: 8px;
+    width: calc(100% - 24px);
+  }
+
   .topbar-nav,
-  .topbar-social {
+  .topbar-right {
     display: none;
   }
 
   .topbar-hamburger {
-    display: flex;
-  }
-
-  .topbar-mobile-menu {
     display: flex;
   }
 }

@@ -1,73 +1,60 @@
+/* ── App shell ── */
 .app-shell {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: var(--bg-page);
 }
 
 .app-content {
   flex: 1;
-  margin-top: 64px; /* topbar height */
-  padding: 0 56px;
+  margin-top: 72px;
+  padding: 0 48px;
   max-width: 1280px;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  /* keep topbar offset */
   padding-top: 0;
   box-sizing: border-box;
 }
 
-/* Re-add topbar offset explicitly so margin shorthand doesn't override */
-.app-content {
-  margin-top: 64px;
-}
-
 @media (max-width: 860px) {
   .app-content {
-    padding: 0 24px;
-    margin-top: 64px;
+    padding: 0 20px;
+    margin-top: 68px;
   }
 }
 
-/* Page background blobs — unchanged */
-.page-bg-home {
-  background: radial-gradient(ellipse at 20% 50%, rgba(76, 29, 149, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(99, 20, 120, 0.1) 0%, transparent 50%);
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-}
-
-.page-bg-movies {
-  background: radial-gradient(ellipse at 10% 30%, rgba(120, 40, 40, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 70%, rgba(76, 29, 149, 0.1) 0%, transparent 50%);
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-}
-
-.page-bg-games {
-  background: radial-gradient(ellipse at 15% 40%, rgba(20, 60, 100, 0.14) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 20%, rgba(76, 29, 149, 0.1) 0%, transparent 50%);
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-}
-
+/* ── Page backgrounds ── */
+.page-bg-home,
+.page-bg-movies,
+.page-bg-games,
 .page-bg-contact {
-  background: radial-gradient(ellipse at 50% 0%, rgba(76, 29, 149, 0.1) 0%, transparent 60%);
   position: fixed;
   inset: 0;
   z-index: -1;
+  background: var(--bg-page);
 }
 
+/* ── Error banner ── */
 .error-banner {
-  background: rgba(220, 60, 60, 0.1);
-  border: 1px solid rgba(220, 60, 60, 0.3);
-  color: #ffb3b3;
-  border-radius: 8px;
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.25);
+  color: #dc2626;
+  border-radius: var(--radius-md);
   padding: 14px 18px;
-  font-family: var(--font-body);
   font-size: 0.85rem;
   margin-bottom: 20px;
+}
+
+/* ── Section label ── */
+.results-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 16px;
 }

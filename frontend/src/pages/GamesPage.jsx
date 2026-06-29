@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Gamepad2 } from "lucide-react";
 import Hero from "../components/Hero";
 import SearchBar from "../components/SearchBar";
 import RecommendationGrid from "../components/RecommendationGrid";
@@ -18,27 +19,34 @@ export default function GamesPage() {
       <div className="page-bg-games" />
       <Hero
         eyebrow="Game Discovery"
-        title="Ready. Set. Play."
+        title="Ready. Set."
+        titleAccent="Play."
         subtitle="Drop a game title you love and we'll find 10 titles across PC, PS5, and Xbox that match your playstyle."
       />
 
       <SearchBar
         label="Game Title"
         placeholder="e.g. Elden Ring, God of War, Spider-Man, Need for Speed..."
-        buttonLabel="→  Find Similar Games"
+        buttonLabel="Find Similar Games"
         onSearch={search}
         loading={loading}
       />
 
       {error && <div className="error-banner">{error}</div>}
-
       {loading && <LoadingSkeleton count={8} />}
-
       {!loading && results && (
-        <RecommendationGrid items={results} posterVariant="game" onSelect={setSelectedGame} />
+        <>
+          <div className="results-section-label">
+            <Gamepad2 size={16} strokeWidth={2} />
+            Top Picks Based on Your Search
+          </div>
+          <RecommendationGrid items={results} posterVariant="game" onSelect={setSelectedGame} />
+        </>
       )}
 
-      {selectedGame && <GameDetailModal game={selectedGame} onClose={() => setSelectedGame(null)} />}
+      {selectedGame && (
+        <GameDetailModal game={selectedGame} onClose={() => setSelectedGame(null)} />
+      )}
 
       <Footer />
     </>

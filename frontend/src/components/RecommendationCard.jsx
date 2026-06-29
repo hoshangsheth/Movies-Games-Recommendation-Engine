@@ -1,25 +1,42 @@
+import { Star, Plus } from "lucide-react";
 import "./RecommendationGrid.css";
 
-/**
- * One poster + title + "Details" button. Matches the original's
- * `st.markdown` poster block + title chip + `st.button("Details", ...)`
- * that opened the `@st.dialog` modal.
- */
-export default function RecommendationCard({ title, poster, posterVariant, onDetails }) {
+export default function RecommendationCard({ title, poster, posterVariant, rating, genre, year, onDetails }) {
   return (
-    <div className="recommendation-card">
-      <div className="recommendation-card-poster-wrap">
+    <div className="rec-card" onClick={onDetails} role="button" tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && onDetails()}>
+      <div className="rec-card-poster-wrap">
         <img
-          className={`recommendation-card-poster${posterVariant === "game" ? " poster-game" : ""}`}
+          className="rec-card-poster"
           src={poster}
           alt={title}
           loading="lazy"
+          onError={(e) => {
+            e.target.src = posterVariant === "game"
+              ? "https://placehold.co/300x400/a855f7/white?text=Game"
+              : "https://placehold.co/300x450/f97316/white?text=Movie";
+          }}
         />
+        {rating && (
+          <div className="rec-card-rating">
+            <Star size={10} fill="currentColor" strokeWidth={0} />
+            {rating}
+          </div>
+        )}
+        <div className="rec-card-add">
+          <Plus size={18} strokeWidth={2.5} />
+        </div>
       </div>
-      <div className="recommendation-card-title">{title}</div>
-      <button className="recommendation-card-button" onClick={onDetails}>
-        Details
-      </button>
+      <div className="rec-card-info">
+        <div className="rec-card-title">{title}</div>
+        {(genre || year) && (
+          <div className="rec-card-meta">
+            {genre && <span>{genre}</span>}
+            {genre && year && <span className="rec-card-dot">•</span>}
+            {year && <span>{year}</span>}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

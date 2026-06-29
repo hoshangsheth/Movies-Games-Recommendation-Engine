@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Film, Sparkles } from "lucide-react";
 import Hero from "../components/Hero";
 import SearchBar from "../components/SearchBar";
 import RecommendationGrid from "../components/RecommendationGrid";
@@ -18,24 +19,29 @@ export default function MoviesPage() {
       <div className="page-bg-movies" />
       <Hero
         eyebrow="Cinema Discovery"
-        title="Lights. Camera. Discover."
+        title="Lights. Camera."
+        titleAccent="Discover."
         subtitle="Enter a film you love and we'll surface 10 titles you'll want to watch next — across Bollywood, Hollywood, and beyond."
       />
 
       <SearchBar
         label="Movie Title"
         placeholder="e.g. Interstellar, Zindagi Na Milegi Dobara, RRR, Inception..."
-        buttonLabel="→  Find Similar Movies"
+        buttonLabel="Find Similar Movies"
         onSearch={search}
         loading={loading}
       />
 
       {error && <div className="error-banner">{error}</div>}
-
       {loading && <LoadingSkeleton count={8} />}
-
       {!loading && results && (
-        <RecommendationGrid items={results} posterVariant="movie" onSelect={setSelectedMovie} />
+        <>
+          <div className="results-section-label">
+            <Film size={16} strokeWidth={2} />
+            Top Picks Based on Your Search
+          </div>
+          <RecommendationGrid items={results} posterVariant="movie" onSelect={setSelectedMovie} />
+        </>
       )}
 
       {selectedMovie && (

@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import MoviesPage from "./pages/MoviesPage";
 import GamesPage from "./pages/GamesPage";
 import ContactPage from "./pages/ContactPage";
+import "./styles/theme.css";
 import "./styles/layout.css";
 
 export default function App() {
