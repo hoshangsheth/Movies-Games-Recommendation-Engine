@@ -5,6 +5,8 @@
 .hero.hero-home {
   padding: 72px 0 48px;
   max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }
 
