@@ -118,8 +118,8 @@ a:focus-visible {
   --text-faint: #6060808;
 
   /* ── Glass / surfaces ── */
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-bg-strong: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(20, 15, 38, 0.90);
+  --glass-bg-strong: rgba(25, 20, 45, 0.97);
   --glass-border: rgba(255, 255, 255, 0.10);
   --glass-border-soft: rgba(168, 85, 247, 0.20);
   --surface-1: rgba(255, 255, 255, 0.04);
